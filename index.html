@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Happy Birthday Fatti ❤️</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{font-family:Georgia,serif;background:radial-gradient(circle at 50% 20%,#fff,#ffe7ef 45%,#f8b9cf);color:#5b1832}
+.screen{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:22px}
+.screen.active{display:flex}.card{width:min(92vw,520px);padding:34px 25px;border-radius:30px;background:#ffffffd9;backdrop-filter:blur(14px);box-shadow:0 18px 70px #7d244333;border:1px solid #fff}
+h1{font-size:clamp(34px,9vw,58px);margin:10px 0;color:#bd2f61}.sub{font-family:Arial,sans-serif;color:#8b405a}
+button{border:0;border-radius:999px;padding:14px 25px;background:#bd2f61;color:#fff;font-size:17px;box-shadow:0 8px 25px #bd2f6144;cursor:pointer}
+#balloonArea{position:absolute;inset:0}.balloon{position:absolute;width:64px;height:82px;border-radius:50% 50% 46% 46%;cursor:pointer;box-shadow:inset -9px -12px 15px #0002;animation:up 4.8s linear forwards}
+.balloon:after{content:"";position:absolute;width:1px;height:45px;background:#777;top:78px;left:32px}
+@keyframes up{from{transform:translateY(110vh) rotate(-8deg)}to{transform:translateY(-120px) rotate(8deg)}}
+.pop{animation:pop .22s ease-out forwards!important}.num{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);font:bold 30px Arial;color:#fff;text-shadow:0 2px 4px #0006}
+.cake{font-size:110px;line-height:1;margin:15px}.candles{font-size:45px;letter-spacing:3px}
+.hint{font-family:Arial,sans-serif;font-size:14px;color:#8d5167}.photo{width:min(78vw,330px);max-height:42vh;object-fit:cover;border-radius:24px;box-shadow:0 12px 40px #67233a44}
+.note{font-family:Arial,sans-serif;line-height:1.65;text-align:left;font-size:16px;max-height:38vh;overflow:auto;padding:5px}
+.fire{position:fixed;font-size:35px;animation:fall 2.8s linear forwards;top:-50px}
+@keyframes fall{to{transform:translateY(115vh) rotate(360deg);opacity:0}}
+@keyframes pop{to{transform:scale(1.6);opacity:0}}
+.fade{animation:fade .7s ease}@keyframes fade{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+</style>
+</head>
+<body>
+
+<section id="s0" class="screen active"><div class="card fade">
+<div style="font-size:54px">💌</div><div class="sub">A LITTLE SURPRISE FOR YOU</div>
+<h1>For Fatti ❤️</h1><p>There is something special waiting for you...</p>
+<button onclick="go(1)">Open My Birthday Card ✨</button></div></section>
+
+<section id="s1" class="screen"><div id="balloonArea"></div>
+<div class="card" style="z-index:2"><div class="num" id="count">0 / 16</div>
+<h1>🎈 Birthday Balloons 🎈</h1><p>Pop all <b>16 balloons</b> to continue!</p>
+<p class="hint">Tap each balloon 🎈</p></div></section>
+
+<section id="s2" class="screen"><div class="card fade">
+<div class="cake">🎂</div><div class="candles">🕯️🕯️🕯️</div>
+<h1>Make a Wish ✨</h1><p>16 candles for 16 beautiful years.</p>
+<p class="hint">Allow microphone access and blow toward your phone, or tap the button.</p>
+<button onclick="blow()">💨 Blow Out the Candles</button></div></section>
+
+<section id="s3" class="screen"><div class="card fade">
+<div style="font-size:44px">🎉✨🎆✨🎉</div>
+<img class="photo" src="fatti.jpg" alt="Fatti">
+<h1>Happy Birthday, Fatti ❤️</h1>
+<p>You are truly special to me. 🌼🐠</p>
+<button onclick="go(4); startSong()">Read My Message 💌</button>
+</div></section>
+
+<section id="s4" class="screen"><div class="card fade">
+<img class="photo" src="fatti.jpg" alt="Fatti">
+<h1>Happy Birthday, My Love ❤️</h1>
+<div class="note">
+Happy birthday, my love.<br><br>
+Today is a truly special day as it marks the birth of the most important person in my life. You bring immense joy and meaning into my world, and I am deeply grateful for your love and for your presence beside me.<br><br>
+I sincerely hope that all your wishes come true and that happiness continues to accompany you always. Thank you for being who you are and for loving me so beautifully. May Allah always protect you, guide you, and keep that beautiful smile upon your face.<br><br>
+Happy birthday once again, my love. I love you very much. 💋😝🌼🐠
+</div>
+<div style="font-size:35px;margin-top:12px">🎂🎈🎆❤️🎉</div>
+</div></section>
+
+<audio id="song" preload="auto" loop>
+  <source src="until-i-found-you.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let current=0,popped=0,micStarted=false;
+const screens=[...document.querySelectorAll('.screen')];
+function go(n){screens[current].classList.remove('active');current=n;screens[n].classList.add('active');if(n===1)spawnBalloons();if(n===3)fireworks();}
+function spawnBalloons(){
+ const area=document.getElementById('balloonArea');
+ area.innerHTML='';
+ popped=0;document.getElementById('count').textContent='0 / 16';
+ for(let i=0;i<16;i++){
+   const b=document.createElement('div');b.className='balloon';
+   b.style.left=(5+Math.random()*88)+'%';b.style.bottom=(-110-Math.random()*80)+'px';
+   b.style.animationDelay=(Math.random()*2)+'s';
+   const palette=['#ff6f91','#ff9fba','#c77dff','#72d6ff','#ffd166','#ff8fab'];
+   b.style.background=palette[i%palette.length];
+   b.onclick=()=>{if(b.dataset.popped)return;b.dataset.popped=1;b.classList.add('pop');popped++;document.getElementById('count').textContent=popped+' / 16';if(popped===16)setTimeout(()=>go(2),450)};
+   area.appendChild(b);
+ }
+}
+function blow(){go(3); trySong(); }
+function trySong(){document.getElementById('song').play().catch(()=>{});}
+function startSong(){trySong()}
+function fireworks(){
+ for(let i=0;i<45;i++){let f=document.createElement('div');f.className='fire';f.textContent=['🎉','✨','🎆','❤️','🌸'][i%5];f.style.left=Math.random()*100+'vw';f.style.animationDelay=Math.random()*1.8+'s';document.body.appendChild(f);setTimeout(()=>f.remove(),4000)}
+}
+async function mic(){
+ if(micStarted)return;micStarted=true;
+ try{
+  const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+  const ctx=new AudioContext(), analyser=ctx.createAnalyser(), src=ctx.createMediaStreamSource(stream);
+  analyser.fftSize=512;src.connect(analyser);const data=new Uint8Array(analyser.frequencyBinCount);
+  let hits=0;
+  const check=()=>{analyser.getByteTimeDomainData(data);let sum=0;for(const x of data){let v=(x-128)/128;sum+=v*v}
+   let rms=Math.sqrt(sum/data.length);if(rms>.12){hits++;if(hits>3){stream.getTracks().forEach(t=>t.stop());go(3);fireworks();trySong();return}}else hits=Math.max(0,hits-1);requestAnimationFrame(check)};
+  check();
+ }catch(e){}
+}
+document.querySelector('#s2 button').addEventListener('touchstart',()=>{}, {passive:true});
+setTimeout(()=>{if(current===2)mic()},300);
+</script>
+</body>
+</html>
